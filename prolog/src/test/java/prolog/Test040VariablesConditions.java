@@ -8,7 +8,7 @@ import prolog.expression.Constant;
 import prolog.expression.Predicate;
 import prolog.expression.Variable;
 
-public class Test04VariablesConditions extends TestCase {
+public class Test040VariablesConditions extends TestCase {
 
     public void testConditionSimpleThreeMatches() {
         PrologEngine engine = new PrologEngine();

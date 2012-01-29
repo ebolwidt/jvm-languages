@@ -6,7 +6,7 @@ import prolog.expression.Constant;
 import prolog.expression.Predicate;
 import prolog.expression.Variable;
 
-public class Test00UnifyExpressions extends TestCase {
+public class Test000UnifyExpressions extends TestCase {
 
     public void testUnifyConstants() {
         Constant a = new Constant("a");

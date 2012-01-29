@@ -5,7 +5,7 @@ import prolog.expression.Constant;
 import prolog.expression.Predicate;
 import junit.framework.TestCase;
 
-public class Test01NoVariables extends TestCase {
+public class Test010NoVariables extends TestCase {
 
     public void testSimpleConstantsStringTrue() {
         PrologEngine engine = new PrologEngine();

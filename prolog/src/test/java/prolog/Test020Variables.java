@@ -5,7 +5,7 @@ import prolog.expression.Constant;
 import prolog.expression.Predicate;
 import prolog.expression.Variable;
 
-public class Test02Variables extends TestCase {
+public class Test020Variables extends TestCase {
 
     public void testNoConditionSimpleOneMatch() {
         PrologEngine engine = new PrologEngine();

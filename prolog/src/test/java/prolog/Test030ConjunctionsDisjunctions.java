@@ -1,14 +1,16 @@
 package prolog;
 
 import junit.framework.TestCase;
+import prolog.condition.Condition;
 import prolog.condition.Conjunction;
 import prolog.condition.Disjunction;
+import prolog.condition.MatchCondition;
 import prolog.condition.UnifyCondition;
 import prolog.expression.Constant;
 import prolog.expression.Predicate;
 import prolog.expression.Variable;
 
-public class Test03ConjunctionsDisjunctions extends TestCase {
+public class Test030ConjunctionsDisjunctions extends TestCase {
 
     public void testDisjunctionBound() {
         PrologEngine engine = setupDisjunction();
@@ -70,6 +72,19 @@ public class Test03ConjunctionsDisjunctions extends TestCase {
         assertFalse(answer.hasAnswer());
     }
 
+    public void testConjunctionBacktrackingVariable() {
+        PrologEngine engine = setupConjunctionBacktracking();
+
+        Variable variableX = new Variable("X");
+
+        Predicate question = new Predicate("suitable", 1, variableX);
+        Result answer = engine.askQuestion(question);
+        assertTrue(answer.hasAnswer());
+        assertEquals(new Constant("Eric"), variableX.getBinding());
+        answer.next();
+        assertFalse("Only one answer expected", answer.hasAnswer());
+    }
+
     private PrologEngine setupDisjunction() {
         PrologEngine engine = new PrologEngine();
 
@@ -94,6 +109,23 @@ public class Test03ConjunctionsDisjunctions extends TestCase {
         Conjunction condition = new Conjunction(condition1, condition2, condition3);
         // three(X, Y, Z) :- X = "one", Y = "two", Z = Y
         engine.addRule(new Rule(new Predicate("three", 3, variableX, variableY, variableZ), condition));
+        return engine;
+    }
+
+    private PrologEngine setupConjunctionBacktracking() {
+        PrologEngine engine = new PrologEngine();
+
+        engine.addRule(new Rule(new Predicate("fast", 1, new Constant("John"))));
+        engine.addRule(new Rule(new Predicate("fast", 1, new Constant("Eric"))));
+        engine.addRule(new Rule(new Predicate("smart", 1, new Constant("Eric"))));
+
+        Variable variableX = new Variable("X");
+        Condition condition1 = new MatchCondition(new Predicate("fast", 1, variableX));
+        Condition condition2 = new MatchCondition(new Predicate("smart", 1, variableX));
+
+        Conjunction condition = new Conjunction(condition1, condition2);
+
+        engine.addRule(new Rule(new Predicate("suitable", 1, variableX), condition));
         return engine;
     }
 }
