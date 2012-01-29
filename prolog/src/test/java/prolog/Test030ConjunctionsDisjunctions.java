@@ -113,6 +113,11 @@ public class Test030ConjunctionsDisjunctions extends TestCase {
     }
 
     private PrologEngine setupConjunctionBacktracking() {
+        // fast(John).
+        // fast(Eric).
+        // smart(Eric).
+        //
+        // suitable(X) :- fast(X), smart(X).
         PrologEngine engine = new PrologEngine();
 
         engine.addRule(new Rule(new Predicate("fast", 1, new Constant("John"))));
