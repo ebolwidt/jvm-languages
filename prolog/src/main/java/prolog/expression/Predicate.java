@@ -65,6 +65,8 @@ public class Predicate extends Expression {
     }
 
     public boolean unify(Executor bindings, Predicate other) {
+        if (!key.equals(other.getKey()))
+            return false;
         for (int e = 0; e < expressions.length; e++) {
             Expression e1 = expressions[e];
             Expression e2 = other.expressions[e];
