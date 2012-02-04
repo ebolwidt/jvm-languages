@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import prolog.PredicateKey;
+import prolog.condition.Condition;
+import prolog.condition.Conjunction;
+import prolog.condition.Disjunction;
+import prolog.condition.IsCondition;
+import prolog.condition.MatchCondition;
+import prolog.condition.UnifyCondition;
 import prolog.expression.Constant;
 import prolog.expression.Expression;
 import prolog.expression.Predicate;
@@ -58,8 +64,10 @@ public class PrologParser {
             peek = tokenizer.peekToken();
             if (peek.getType() == TokenType.COMMA)
                 tokenizer.consume(TokenType.COMMA);
-            else if (peek.getType() == TokenType.RPAREN)
+            else if (peek.getType() == TokenType.RPAREN) {
+                tokenizer.consume(TokenType.RPAREN);
                 break;
+            }
         }
         return new Predicate(new PredicateKey(token.getText(), arguments.size()), arguments.toArray(new Expression[arguments
                 .size()]));
@@ -77,6 +85,72 @@ public class PrologParser {
         default:
             return parseAtom(token);
         }
+    }
+
+    public Condition parseAtomicCondition() {
+        Token token = tokenizer.peekToken();
+        if (token.getType() == TokenType.LPAREN) {
+            tokenizer.consume(TokenType.LPAREN);
+            Condition condition = parseCondition();
+            tokenizer.consume(TokenType.RPAREN);
+            return condition;
+        }
+
+        Expression expression = parseExpression();
+        token = tokenizer.peekToken();
+        switch (token.getType()) {
+        case IDENTIFIER:
+            if ("is".equals(token.getText())) {
+                tokenizer.consume(TokenType.IDENTIFIER);
+                Expression right = parseExpression();
+                return new IsCondition(expression, right);
+            }
+        case EQUALS:
+            tokenizer.consume(TokenType.EQUALS);
+            Expression right = parseExpression();
+            return new UnifyCondition(expression, right);
+        }
+        if (expression instanceof Predicate) {
+            return new MatchCondition((Predicate) expression);
+        } else {
+            // Unknown token!!
+            System.out.println(expression);
+            throw new SyntaxException(null);
+        }
+    }
+
+    public Condition parseConjunction() {
+        Condition condition = parseAtomicCondition();
+        if (tokenizer.peekToken().getType() == TokenType.COMMA) {
+            List<Condition> conditions = new ArrayList<Condition>();
+            conditions.add(condition);
+            while (tokenizer.peekToken().getType() == TokenType.COMMA) {
+                tokenizer.consume(TokenType.COMMA);
+                condition = parseAtomicCondition();
+                conditions.add(condition);
+            }
+            condition = new Conjunction(conditions);
+        }
+        return condition;
+    }
+
+    public Condition parseDisjunction() {
+        Condition condition = parseConjunction();
+        if (tokenizer.peekToken().getType() == TokenType.SEMICOLON) {
+            List<Condition> conditions = new ArrayList<Condition>();
+            conditions.add(condition);
+            while (tokenizer.peekToken().getType() == TokenType.SEMICOLON) {
+                tokenizer.consume(TokenType.SEMICOLON);
+                condition = parseConjunction();
+                conditions.add(condition);
+            }
+            condition = new Disjunction(conditions);
+        }
+        return condition;
+    }
+
+    public Condition parseCondition() {
+        return parseDisjunction();
     }
 
 }

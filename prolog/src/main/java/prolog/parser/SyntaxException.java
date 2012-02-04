@@ -11,4 +11,9 @@ public class SyntaxException extends RuntimeException {
     public Token getToken() {
         return token;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + (token == null ? "" : ": " + token.toString());
+    }
 }

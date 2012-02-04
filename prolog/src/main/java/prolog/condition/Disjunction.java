@@ -21,6 +21,14 @@ public class Disjunction extends Condition {
         this.conditions = conditions;
     }
 
+    public List<Condition> getConditions() {
+        return conditions;
+    }
+
+    public Condition getCondition(int index) {
+        return conditions.get(index);
+    }
+
     @Override
     public Disjunction duplicate(Map<Variable, Variable> variableScope) {
         List<Condition> duplicates = new ArrayList<Condition>(conditions.size());

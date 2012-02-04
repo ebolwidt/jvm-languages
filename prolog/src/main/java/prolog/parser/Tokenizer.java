@@ -56,6 +56,8 @@ public class Tokenizer {
     /** */
     new OperatorDefinition("-", TokenType.MINUS),
     /** */
+    new OperatorDefinition("=", TokenType.EQUALS),
+    /** */
     };
 
     private PushbackReader in;

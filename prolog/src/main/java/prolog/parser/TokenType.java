@@ -5,5 +5,5 @@ public enum TokenType {
     /** */
     LPAREN, RPAREN, COMMA, DOT, IMPLICATION, SEMICOLON, END, INVALID, CUT, EMPTY_LIST, LBRACKET, RBRACKET, PIPE,
     /** */
-    PLUS, MINUS;
+    PLUS, MINUS, EQUALS;
 }
