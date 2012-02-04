@@ -1,0 +1,9 @@
+package prolog.parser;
+
+public enum TokenType {
+    STRING, NUMBER, IDENTIFIER, VARIABLE,
+    /** */
+    LPAREN, RPAREN, COMMA, DOT, IMPLICATION, SEMICOLON, END, INVALID, CUT, EMPTY_LIST, LBRACKET, RBRACKET, PIPE,
+    /** */
+    PLUS, MINUS;
+}
