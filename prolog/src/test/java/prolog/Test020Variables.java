@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import prolog.expression.Constant;
 import prolog.expression.Predicate;
 import prolog.expression.Variable;
+import prolog.parser.PrologParser;
 
 public class Test020Variables extends TestCase {
 
@@ -53,7 +54,7 @@ public class Test020Variables extends TestCase {
 
     }
 
-    public void testNoConditionSimplThreeMatches() {
+    public void testNoConditionSimpleThreeMatches() {
         PrologEngine engine = new PrologEngine();
 
         // father("Kees", "Piet").
@@ -95,11 +96,37 @@ public class Test020Variables extends TestCase {
 
         // thing(X).
         engine.addRule(new Rule(new Predicate("thing", 1, new Variable("X"))));
-        
-        
+
         Result result1 = engine.askQuestion(new Predicate("thing", 1, new Constant(42)));
         assertTrue(result1.hasAnswer());
         Result result2 = engine.askQuestion(new Predicate("thing", 1, new Constant("Hello world")));
         assertTrue(result2.hasAnswer());
     }
+
+    public void testVariableBindingsAreBiDirectional() {
+        {
+            PrologEngine engine1 = engineWithRule("hello(X) :- X = Y, Y = 4.");
+            Variable t1 = new Variable("T1");
+            Result result1 = engine1.askQuestion(new Predicate("hello", 1, t1));
+            assertTrue(result1.hasOneAnswer());
+            assertEquals("4", t1.getBinding().toString());
+        }
+
+        {
+            PrologEngine engine1 = engineWithRule("hello(X) :- Y = X, Y = 4.");
+            Variable t1 = new Variable("T1");
+            Result result1 = engine1.askQuestion(new Predicate("hello", 1, t1));
+            assertTrue(result1.hasOneAnswer());
+            assertEquals("4", t1.getBinding().toString());
+        }
+    }
+
+    private PrologEngine engineWithRule(String program) {
+        PrologParser parser = new PrologParser(program);
+        Rule rule = parser.parseRule();
+        PrologEngine engine = new PrologEngine();
+        engine.addRule(rule);
+        return engine;
+    }
+
 }

@@ -14,7 +14,8 @@ public class Variable extends Expression {
     private Expression binding;
 
     public Variable(String name) {
-        super();
+        if (name == null)
+            throw new NullPointerException("name");
         this.name = name;
     }
 
@@ -78,6 +79,17 @@ public class Variable extends Expression {
 
     public Expression getDirectBinding() {
         return binding;
+    }
+
+    /**
+     * Compare only for equal names.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || o.getClass() != getClass())
+            return false;
+        Variable other = (Variable) o;
+        return name.equals(other.name);
     }
 
 }

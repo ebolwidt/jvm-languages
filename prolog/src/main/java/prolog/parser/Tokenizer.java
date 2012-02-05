@@ -56,6 +56,10 @@ public class Tokenizer {
     /** */
     new OperatorDefinition("-", TokenType.MINUS),
     /** */
+    new OperatorDefinition("*", TokenType.MULTIPLY),
+    /** */
+    new OperatorDefinition("/", TokenType.DIVIDE),
+    /** */
     new OperatorDefinition("=", TokenType.EQUALS),
     /** */
     };

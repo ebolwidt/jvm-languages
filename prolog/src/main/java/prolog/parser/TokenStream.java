@@ -32,11 +32,11 @@ public class TokenStream {
         return pushedBack;
     }
 
-    public void pushBack(Token token) {
-        if (pushedBack != null) {
-            throw new IllegalStateException("There is already a pushed back token, only one push back is supported");
-        }
-        pushedBack = token;
-    }
+    // public void pushBack(Token token) {
+    // if (pushedBack != null) {
+    // throw new IllegalStateException("There is already a pushed back token, only one push back is supported");
+    // }
+    // pushedBack = token;
+    // }
 
 }
